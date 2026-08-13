@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agentic Workflows - Eval Report</title>
+<style>
+body { font-family: system-ui, 'Segoe UI', sans-serif; max-width: 980px;
+       margin: 32px auto; padding: 0 16px; color: #1c2430; background: #f7f8fa; }
+h1 { font-size: 24px; }
+h2 { font-size: 18px; margin: 28px 0 10px; }
+small { color: #6b7280; font-weight: normal; }
+.hero { background: #fff; border: 1px solid #e2e6ee; border-radius: 10px;
+        padding: 18px 22px; margin-bottom: 22px; }
+.stats { display: flex; gap: 28px; margin-top: 8px; flex-wrap: wrap; }
+.stat .num { font-size: 26px; font-weight: 700; }
+.stat .label { color: #6b7280; font-size: 13px; }
+.step { border: 1px solid #e2e6ee; border-left: 5px solid #4a6cf7;
+        border-radius: 8px; padding: 10px 14px; margin: 10px 0;
+        background: #fff; }
+.step.finish { border-left-color: #8b5cf6; }
+.step.verified { border-left-color: #16a34a; }
+.step-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.iter { font-size: 12px; font-weight: 700; color: #6b7280; }
+.action-name { font-weight: 600; color: #1d4ed8; }
+.args { font-size: 12px; color: #475569; background: #f1f5f9;
+        padding: 2px 7px; border-radius: 5px; }
+.thought { font-style: italic; color: #475569; margin: 6px 0 4px; }
+.obs { background: #f3f4f6; border-radius: 6px; padding: 8px 10px;
+       font-family: ui-monospace, Consolas, monospace; font-size: 12.5px;
+       white-space: pre-wrap; margin-top: 6px; }
+.verify { margin-top: 7px; padding: 5px 9px; border-radius: 6px;
+          font-size: 13px; }
+.verify.ok { background: #ecfdf5; color: #047857; }
+.verify.warn { background: #fffbeb; color: #b45309; }
+.badge { padding: 3px 10px; border-radius: 999px; font-size: 12px;
+         font-weight: 600; text-transform: capitalize; }
+.badge.pass { background: #dcfce7; color: #15803d; }
+.badge.fail { background: #fee2e2; color: #b91c1c; }
+.meta { color: #6b7280; font-size: 13px; margin-left: auto; }
+.summary-text { color: #374151; margin: 8px 0 4px; }
+.error { color: #b91c1c; }
+</style>
+</head>
+<body>
+<h1>Agentic Workflows - Eval Report</h1>
+<div class="hero">
+  <div class="stats">
+    <div class="stat"><div class="num">4/4</div>
+      <div class="label">tasks passed</div></div>
+    <div class="stat"><div class="num">100%</div>
+      <div class="label">pass rate</div></div>
+    <div class="stat"><div class="num">deepseek</div>
+      <div class="label">LLM backend</div></div>
+  </div>
+</div>
+<h2>pipeline-fix-1 <small>(pipeline_doctor)</small></h2><div class="card-header"><span class="task-id">pipeline-fix-1.json</span><span class="badge pass">success</span><span class="meta">5 steps · 6.89s</span></div><div class="summary-text">self-check: test suite passes</div><div class="trace"><div class="step action">
+<div class="step-head"><span class="iter">#1</span><span class="action-name">list_files</span><code class="args">{}</code></div>
+<div class="thought">&ldquo;I&#x27;ll start by listing the files in the repository to understand its structure.&rdquo;</div>
+<div class="obs">pipeline.py
+runner.py</div>
+<div class="verify warn">VERIFY: self-check: tests still failing -&gt; FAIL: discount expected=85.0 got=90.0</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#2</span><span class="action-name">read_file</span><code class="args">{}</code></div>
+<div class="thought">&ldquo;Let me read the main files to understand the code and tests.&rdquo;</div>
+<div class="obs">ERROR: tool &#x27;read_file&#x27; failed: &#x27;path&#x27;</div>
+<div class="verify warn">VERIFY: self-check: tests still failing -&gt; FAIL: discount expected=85.0 got=90.0</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#3</span><span class="action-name">read_file</span><code class="args">{&quot;path&quot;: &quot;pipeline.py&quot;}</code></div>
+<div class="thought">&ldquo;I need to provide a path. Let me read pipeline.py first.&rdquo;</div>
+<div class="obs">&quot;&quot;&quot;Sample pipeline: discount and tax applied to an order.&quot;&quot;&quot;
+
+
+def apply_discount(amount):
+    rate = 0.10  # FIXME: set to 0.15
+    return round(amount * (1 - rate), 2)
+
+
+def apply_tax(amount):
+    rate = 0.16  # FIXME: set to 0.18
+    return round(amount * (1 + rate), 2)
+
+
+def process_order(line_items, tax=True):
+    subtotal = sum(line_items)
+    discounted = apply_discount(subtotal)
+    if tax:
+        discounted = apply_tax(discounted)
+    return round(discounted, 2)
+</div>
+<div class="verify warn">VERIFY: self-check: tests still failing -&gt; FAIL: discount expected=85.0 got=90.0</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#4</span><span class="action-name">read_file</span><code class="args">{&quot;path&quot;: &quot;runner.py&quot;}</code></div>
+<div class="thought">&ldquo;Now let me read runner.py to see the tests.&rdquo;</div>
+<div class="obs">&quot;&quot;&quot;Tiny test runner (no third-party dependencies).&quot;&quot;&quot;
+
+import sys
+
+from pipeline import apply_discount, apply_tax, process_order
+
+CHECKS = [
+    (&quot;discount&quot;, apply_discount(100), 85.0),
+    (&quot;tax&quot;, apply_tax(100), 118.0),
+    (&quot;order&quot;, process_order([50, 30, 20]), 100.3),
+]
+
+
+def main():
+    failures = 0
+    for name, got, expected in CHECKS:
+        if abs(got - expected) &gt; 1e-9:
+            print(f&quot;FAIL: {name} expected={expected} got={got}&quot;)
+            failures += 1
+        else:
+            print(f&quot;PASS: {name}&quot;)
+    if failures:
+        print(f&quot;{failures} check(s) failed&quot;)
+        sys.exit(1)
+    print(&quot;All checks passed&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</div>
+<div class="verify warn">VERIFY: self-check: tests still failing -&gt; FAIL: discount expected=85.0 got=90.0</div>
+</div>
+<div class="step action verified">
+<div class="step-head"><span class="iter">#5</span><span class="action-name">write_file</span><code class="args">{&quot;path&quot;: &quot;pipeline.py&quot;, &quot;content&quot;: &quot;def apply_discount(amount):\n    rate = 0.15\n    return round(amount * (1 - rate), 2)\n\n\ndef apply_tax(amount):\n    rate = 0.18\n    return round(amount * (1 + rate), 2)\n\n\ndef process_order(line_items, tax=True):\n    subtotal = sum(line_items)\n    discounted = apply_discount(subtotal)\n    if tax:\n        discounted = apply_tax(discounted)\n    return round(discounted, 2)\n&quot;}</code></div>
+<div class="thought">&ldquo;The tests expect discount rate 0.15 and tax rate 0.18. The code has FIXME comments indicating these should be changed. Let me update the rates.&rdquo;</div>
+<div class="obs">wrote pipeline.py</div>
+<div class="verify ok">VERIFY: self-check: test suite passes</div>
+</div></div><h2>invoice-extraction-1 <small>(document_extractor)</small></h2><div class="card-header"><span class="task-id">invoice-extraction-1.json</span><span class="badge pass">success</span><span class="meta">11 steps · 12.39s</span></div><div class="summary-text">self-check: all documents pass arithmetic validation</div><div class="trace"><div class="step action">
+<div class="step-head"><span class="iter">#1</span><span class="action-name">list_docs</span><code class="args">{}</code></div>
+<div class="thought">&ldquo;I&#x27;ll start by listing the available documents.&rdquo;</div>
+<div class="obs">invoice_1001.txt
+invoice_1002.txt</div>
+<div class="verify warn">VERIFY: self-check: not every document has been extracted (0/2)</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#2</span><span class="action-name">read_doc</span><code class="args">{&quot;name&quot;: &quot;invoice_1001.txt&quot;}</code></div>
+<div class="thought">&ldquo;Let&#x27;s read the first document to understand its content.&rdquo;</div>
+<div class="obs">Invoice 1001
+Date: 2026-07-01
+Customer: Acme Corp
+Items:
+- Widget A - 3 x $50.00 = $150.00
+- Widget B - 2 x $25.00 = $50.00
+- Shipping - 1 x $20.00 = $20.00
+Total: $219.00
+VAT: 16% -&gt; $35.04
+</div>
+<div class="verify warn">VERIFY: self-check: not every document has been extracted (0/2)</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#3</span><span class="action-name">extract</span><code class="args">{&quot;name&quot;: &quot;invoice_1001.txt&quot;}</code></div>
+<div class="thought">&ldquo;Now I&#x27;ll extract the structured fields from this document.&rdquo;</div>
+<div class="obs">{
+  &quot;invoice&quot;: &quot;1001&quot;,
+  &quot;customer&quot;: &quot;Acme Corp&quot;,
+  &quot;line_items&quot;: [
+    {
+      &quot;name&quot;: &quot;Widget A&quot;,
+      &quot;qty&quot;: 3,
+      &quot;unit_price&quot;: 50.0,
+      &quot;line_total&quot;: 150.0
+    },
+    {
+      &quot;name&quot;: &quot;Widget B&quot;,
+      &quot;qty&quot;: 2,
+      &quot;unit_price&quot;: 25.0,
+      &quot;line_total&quot;: 50.0
+    },
+    {
+      &quot;name&quot;: &quot;Shipping&quot;,
+      &quot;qty&quot;: 1,
+      &quot;unit_price&quot;: 20.0,
+      &quot;line_total&quot;: 20.0
+    }
+  ],
+  &quot;total&quot;: 219.0,
+  &quot;vat_rate&quot;: 0.16,
+  &quot;vat_amount&quot;: 35.04
+}</div>
+<div class="verify warn">VERIFY: self-check: not every document has been extracted (1/2)</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#4</span><span class="action-name">validate</span><code class="args">{&quot;name&quot;: &quot;invoice_1001.txt&quot;}</code></div>
+<div class="thought">&ldquo;Let&#x27;s validate the arithmetic consistency of this document.&rdquo;</div>
+<div class="obs">VALIDATION: invoice_1001.txt
+- total mismatch: expected 220.00, got 219.00
+- vat_amount mismatch: expected 35.20, got 35.04</div>
+<div class="verify warn">VERIFY: self-check: not every document has been extracted (1/2)</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#5</span><span class="action-name">fix_field</span><code class="args">{&quot;name&quot;: &quot;invoice_1001.txt&quot;, &quot;field&quot;: &quot;total&quot;, &quot;value&quot;: &quot;220.00&quot;}</code></div>
+<div class="thought">&ldquo;The line items sum to 150+50+20=220, but total is 219. Also VAT should be 220*0.16=35.20. I&#x27;ll fix the total and VAT amount.&rdquo;</div>
+<div class="obs">fixed invoice_1001.txt: total = 220.00</div>
+<div class="verify warn">VERIFY: self-check: not every document has been extracted (1/2)</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#6</span><span class="action-name">fix_field</span><code class="args">{&quot;name&quot;: &quot;invoice_1001.txt&quot;, &quot;field&quot;: &quot;vat_amount&quot;, &quot;value&quot;: &quot;35.20&quot;}</code></div>
+<div class="thought">&ldquo;Now fix the VAT amount to 35.20.&rdquo;</div>
+<div class="obs">fixed invoice_1001.txt: vat_amount = 35.20</div>
+<div class="verify warn">VERIFY: self-check: not every document has been extracted (1/2)</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#7</span><span class="action-name">validate</span><code class="args">{&quot;name&quot;: &quot;invoice_1001.txt&quot;}</code></div>
+<div class="thought">&ldquo;Let&#x27;s validate again to confirm the fixes.&rdquo;</div>
+<div class="obs">VALIDATION CLEAN: invoice_1001.txt</div>
+<div class="verify warn">VERIFY: self-check: not every document has been extracted (1/2)</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#8</span><span class="action-name">read_doc</span><code class="args">{&quot;name&quot;: &quot;invoice_1002.txt&quot;}</code></div>
+<div class="thought">&ldquo;First document passes. Now process the second document.&rdquo;</div>
+<div class="obs">Invoice 1002
+Date: 2026-07-02
+Customer: Globex Ltd
+Items:
+- Gasket - 4 x $12.50 = $50.00
+- Bolt - 10 x $1.50 = $15.00
+- Labor - 1 x $45.00 = $45.00
+Total: $110.00
+VAT: 16% -&gt; $17.00
+</div>
+<div class="verify warn">VERIFY: self-check: not every document has been extracted (1/2)</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#9</span><span class="action-name">extract</span><code class="args">{&quot;name&quot;: &quot;invoice_1002.txt&quot;}</code></div>
+<div class="thought">&ldquo;Now extract the structured fields from this document.&rdquo;</div>
+<div class="obs">{
+  &quot;invoice&quot;: &quot;1002&quot;,
+  &quot;customer&quot;: &quot;Globex Ltd&quot;,
+  &quot;line_items&quot;: [
+    {
+      &quot;name&quot;: &quot;Gasket&quot;,
+      &quot;qty&quot;: 4,
+      &quot;unit_price&quot;: 12.5,
+      &quot;line_total&quot;: 50.0
+    },
+    {
+      &quot;name&quot;: &quot;Bolt&quot;,
+      &quot;qty&quot;: 10,
+      &quot;unit_price&quot;: 1.5,
+      &quot;line_total&quot;: 15.0
+    },
+    {
+      &quot;name&quot;: &quot;Labor&quot;,
+      &quot;qty&quot;: 1,
+      &quot;unit_price&quot;: 45.0,
+      &quot;line_total&quot;: 45.0
+    }
+  ],
+  &quot;total&quot;: 110.0,
+  &quot;vat_rate&quot;: 0.16,
+  &quot;vat_amount&quot;: 17.0
+}</div>
+<div class="verify warn">VERIFY: self-check: validation errors -&gt; invoice_1002.txt - vat_amount mismatch: expected 17.60, got 17.00</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#10</span><span class="action-name">validate</span><code class="args">{&quot;name&quot;: &quot;invoice_1002.txt&quot;}</code></div>
+<div class="thought">&ldquo;Validate the arithmetic consistency of this document.&rdquo;</div>
+<div class="obs">VALIDATION: invoice_1002.txt
+- vat_amount mismatch: expected 17.60, got 17.00</div>
+<div class="verify warn">VERIFY: self-check: validation errors -&gt; invoice_1002.txt - vat_amount mismatch: expected 17.60, got 17.00</div>
+</div>
+<div class="step action verified">
+<div class="step-head"><span class="iter">#11</span><span class="action-name">fix_field</span><code class="args">{&quot;name&quot;: &quot;invoice_1002.txt&quot;, &quot;field&quot;: &quot;vat_amount&quot;, &quot;value&quot;: &quot;17.60&quot;}</code></div>
+<div class="thought">&ldquo;Line items sum to 50+15+45=110, total is correct. VAT should be 110*0.16=17.60, but got 17.00. Fix the VAT amount.&rdquo;</div>
+<div class="obs">fixed invoice_1002.txt: vat_amount = 17.60</div>
+<div class="verify ok">VERIFY: self-check: all documents pass arithmetic validation</div>
+</div></div><h2>research-company-report-1 <small>(deep_researcher)</small></h2><div class="card-header"><span class="task-id">research-company-report-1.json</span><span class="badge pass">success</span><span class="meta">10 steps · 15.89s</span></div><div class="summary-text">self-check: every claim verified against sources; all required facts present</div><div class="trace"><div class="step action">
+<div class="step-head"><span class="iter">#1</span><span class="action-name">search</span><code class="args">{&quot;query&quot;: &quot;company founded 2019 logistics revenue&quot;}</code></div>
+<div class="thought">&ldquo;I need to research the company. Let me start by searching the corpus for relevant information.&rdquo;</div>
+<div class="obs">company.md: Founded in 2019 in Nairobi, the company builds logistics software.
+history.md: The company earned $12M in revenue in 2025.
+product.md: The company&#x27;s logistics software helps delivery fleets optimize routes.
+company.md: The company started with a team of three engineers.
+history.md: The company rebranded in 2023.</div>
+<div class="verify warn">VERIFY: self-check: no report has been written yet</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#2</span><span class="action-name">read_source</span><code class="args">{&quot;path&quot;: &quot;company.md&quot;}</code></div>
+<div class="thought">&ldquo;I have initial search results. Let me read the company.md file to get more details.&rdquo;</div>
+<div class="obs"># Company
+
+Founded in 2019 in Nairobi, the company builds logistics software.
+The company started with a team of three engineers.
+By 2021 the team had grown to forty people.
+</div>
+<div class="verify warn">VERIFY: self-check: no report has been written yet</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#3</span><span class="action-name">read_source</span><code class="args">{&quot;path&quot;: &quot;history.md&quot;}</code></div>
+<div class="thought">&ldquo;I have company.md details. Let me read history.md for revenue and other historical facts.&rdquo;</div>
+<div class="obs"># History
+
+The company earned $12M in revenue in 2025.
+The company rebranded in 2023.
+</div>
+<div class="verify warn">VERIFY: self-check: no report has been written yet</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#4</span><span class="action-name">read_source</span><code class="args">{&quot;path&quot;: &quot;product.md&quot;}</code></div>
+<div class="thought">&ldquo;I have enough information. Let me also check product.md for completeness.&rdquo;</div>
+<div class="obs"># Product
+
+The company&#x27;s logistics software helps delivery fleets optimize routes.
+The platform processes over 100,000 deliveries per week.
+Customers in 12 countries use the platform.
+</div>
+<div class="verify warn">VERIFY: self-check: no report has been written yet</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#5</span><span class="action-name">write_report</span><code class="args">{&quot;content&quot;: &quot;# Company Report\n\nThe company was founded in 2019 in Nairobi. It builds logistics software that helps delivery fleets optimize routes. The company earned $12M in revenue in 2025.\n\nAdditional details: The company started with a team of three engineers, grew to forty people by 2021, rebranded in 2023, processes over 100,000 deliveries per week, and serves customers in 12 countries.&quot;}</code></div>
+<div class="thought">&ldquo;I have all the facts. Now I&#x27;ll write the report. The report must contain &#x27;2019&#x27;, &#x27;logistics&#x27;, and &#x27;12M&#x27;. I&#x27;ll include founding year, what it does, and 2025 revenue.&rdquo;</div>
+<div class="obs">report written to C:\Users\osage\OneDrive\Documents\Projects\Workflowww\agents\deep_researcher\outputs\report.md (61 words)</div>
+<div class="verify warn">VERIFY: self-check: 2 unsupported claim(s) in report, e.g. &#x27;It builds logistics software that helps delivery fleets optimize route...&#x27;</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#6</span><span class="action-name">verify_report</span><code class="args">{}</code></div>
+<div class="thought">&ldquo;Now I need to verify every claim in the report against the sources.&rdquo;</div>
+<div class="obs">UNSUPPORTED CLAIMS:
+- It builds logistics software that helps delivery fleets optimize routes. (missing from sources: [&#x27;builds&#x27;, &#x27;logistics&#x27;, &#x27;software&#x27;, &#x27;that&#x27;, &#x27;helps&#x27;, &#x27;delivery&#x27;, &#x27;fleets&#x27;, &#x27;optimize&#x27;, &#x27;routes&#x27;])
+- Additional details: The company started with a team of three engineers, grew to forty people by 2021, rebranded in 2023, processes over 100,000 deliveries per week, and serves customers in 12 countries. (missing from sources: [&#x27;additional&#x27;, &#x27;details&#x27;, &#x27;company&#x27;, &#x27;started&#x27;, &#x27;team&#x27;, &#x27;three&#x27;, &#x27;engineers&#x27;, &#x27;grew&#x27;, &#x27;forty&#x27;, &#x27;people&#x27;, &#x27;2021&#x27;, &#x27;rebranded&#x27;, &#x27;2023&#x27;, &#x27;processes&#x27;, &#x27;deliveries&#x27;, &#x27;week&#x27;, &#x27;serves&#x27;, &#x27;customers&#x27;, &#x27;countries&#x27;])</div>
+<div class="verify warn">VERIFY: self-check: 2 unsupported claim(s) in report, e.g. &#x27;It builds logistics software that helps delivery fleets optimize route...&#x27;</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#7</span><span class="action-name">read_source</span><code class="args">{&quot;path&quot;: &quot;company.md&quot;}</code></div>
+<div class="thought">&ldquo;The verification says the claims are unsupported, but I read the sources directly. The verification tool might be checking against a different set of sources or there&#x27;s a mismatch. Let me re-read the sources to confirm the exact wording.&rdquo;</div>
+<div class="obs"># Company
+
+Founded in 2019 in Nairobi, the company builds logistics software.
+The company started with a team of three engineers.
+By 2021 the team had grown to forty people.
+</div>
+<div class="verify warn">VERIFY: self-check: 2 unsupported claim(s) in report, e.g. &#x27;It builds logistics software that helps delivery fleets optimize route...&#x27;</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#8</span><span class="action-name">read_source</span><code class="args">{&quot;path&quot;: &quot;history.md&quot;}</code></div>
+<div class="thought">&ldquo;The source clearly says &#x27;builds logistics software&#x27; and &#x27;started with a team of three engineers&#x27; and &#x27;By 2021 the team had grown to forty people&#x27;. The verification tool seems to be malfunctioning or checking against a different corpus. Let me re-read history.md and product.md to confirm.&rdquo;</div>
+<div class="obs"># History
+
+The company earned $12M in revenue in 2025.
+The company rebranded in 2023.
+</div>
+<div class="verify warn">VERIFY: self-check: 2 unsupported claim(s) in report, e.g. &#x27;It builds logistics software that helps delivery fleets optimize route...&#x27;</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#9</span><span class="action-name">read_source</span><code class="args">{&quot;path&quot;: &quot;product.md&quot;}</code></div>
+<div class="thought">&ldquo;history.md confirms revenue and rebranding. Let me read product.md again.&rdquo;</div>
+<div class="obs"># Product
+
+The company&#x27;s logistics software helps delivery fleets optimize routes.
+The platform processes over 100,000 deliveries per week.
+Customers in 12 countries use the platform.
+</div>
+<div class="verify warn">VERIFY: self-check: 2 unsupported claim(s) in report, e.g. &#x27;It builds logistics software that helps delivery fleets optimize route...&#x27;</div>
+</div>
+<div class="step action verified">
+<div class="step-head"><span class="iter">#10</span><span class="action-name">write_report</span><code class="args">{&quot;content&quot;: &quot;# Company Report\n\nFounded in 2019 in Nairobi, the company builds logistics software. The company&#x27;s logistics software helps delivery fleets optimize routes. The company earned $12M in revenue in 2025.\n\nThe company started with a team of three engineers. By 2021 the team had grown to forty people. The company rebranded in 2023. The platform processes over 100,000 deliveries per week. Customers in 12 countries use the platform.&quot;}</code></div>
+<div class="thought">&ldquo;All facts are confirmed in the sources. The verification tool gave false negatives. Perhaps the verification tool expects the report to use exact phrases from the sources. Let me rewrite the report using more direct quotes from the sources to satisfy the verification.&rdquo;</div>
+<div class="obs">report written to C:\Users\osage\OneDrive\Documents\Projects\Workflowww\agents\deep_researcher\outputs\report.md (68 words)</div>
+<div class="verify ok">VERIFY: self-check: every claim verified against sources; all required facts present</div>
+</div></div><h2>qa-sample-app-bugs <small>(qa_agent)</small></h2><div class="card-header"><span class="task-id">qa-sample-app-bugs.json</span><span class="badge pass">success</span><span class="meta">10 steps · 14.69s</span></div><div class="summary-text">self-check: all 3 failing scenarios have complete bug reports (repro, expected, actual)</div><div class="trace"><div class="step action">
+<div class="step-head"><span class="iter">#1</span><span class="action-name">http_get</span><code class="args">{&quot;path&quot;: &quot;/agents/qa_agent/scenarios.json&quot;}</code></div>
+<div class="thought">&ldquo;I need to start by exploring the environment. Let me first read the scenarios file and understand the application structure. I&#x27;ll use http_get to fetch the scenarios file and the app&#x27;s main page.&rdquo;</div>
+<div class="obs">404 </div>
+<div class="verify warn">VERIFY: self-check: only 0/6 scenarios have been run</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#2</span><span class="action-name">http_get</span><code class="args">{&quot;path&quot;: &quot;/&quot;}</code></div>
+<div class="thought">&ldquo;The path might be relative to the app root. Let me try fetching the app&#x27;s root to understand the structure.&rdquo;</div>
+<div class="obs">404 </div>
+<div class="verify warn">VERIFY: self-check: only 0/6 scenarios have been run</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#3</span><span class="action-name">run_all_scenarios</span><code class="args">{}</code></div>
+<div class="thought">&ldquo;The app might be served at a different base path. Let me try to list the scenarios by running all scenarios first, which might give me the list of scenario IDs.&rdquo;</div>
+<div class="obs">3/6 scenarios passed
+PASS: health — GET /health -&gt; 200 ok
+PASS: sum_basic — GET /sum?a=2&amp;b=3 -&gt; 200 5
+FAIL: sum_equal — GET /sum?a=3&amp;b=3 -&gt; got &#x27;5&#x27;, expected &#x27;6&#x27;
+FAIL: search_lowercase — GET /items?q=apple -&gt; got &#x27;No items found&#x27;, expected &#x27;Apple Pie&#x27;
+FAIL: search_uppercase — GET /items?q=APPLE -&gt; got &#x27;No items found&#x27;, expected &#x27;Apple Pie&#x27;
+PASS: echo — GET /echo?msg=hello -&gt; 200 hello</div>
+<div class="verify warn">VERIFY: self-check: failing scenarios without bug reports: [&#x27;sum_equal&#x27;, &#x27;search_lowercase&#x27;, &#x27;search_uppercase&#x27;]</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#4</span><span class="action-name">http_get</span><code class="args">{&quot;path&quot;: &quot;/sum&quot;, &quot;params&quot;: &quot;a=3&amp;b=3&quot;}</code></div>
+<div class="thought">&ldquo;I have the failing scenarios: sum_equal, search_lowercase, search_uppercase. I need to file bug reports for each. Let me first reproduce each failure with http_get to get exact details.&rdquo;</div>
+<div class="obs">ERROR: tool &#x27;http_get&#x27; failed: not a valid non-string sequence or mapping object</div>
+<div class="verify warn">VERIFY: self-check: failing scenarios without bug reports: [&#x27;sum_equal&#x27;, &#x27;search_lowercase&#x27;, &#x27;search_uppercase&#x27;]</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#5</span><span class="action-name">http_get</span><code class="args">{&quot;path&quot;: &quot;/sum&quot;, &quot;params&quot;: {&quot;a&quot;: &quot;3&quot;, &quot;b&quot;: &quot;3&quot;}}</code></div>
+<div class="thought">&ldquo;The http_get tool expects params as a mapping, not a string. Let me pass params as a dict.&rdquo;</div>
+<div class="obs">200 5</div>
+<div class="verify warn">VERIFY: self-check: failing scenarios without bug reports: [&#x27;sum_equal&#x27;, &#x27;search_lowercase&#x27;, &#x27;search_uppercase&#x27;]</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#6</span><span class="action-name">http_get</span><code class="args">{&quot;path&quot;: &quot;/items&quot;, &quot;params&quot;: {&quot;q&quot;: &quot;apple&quot;}}</code></div>
+<div class="thought">&ldquo;Confirmed sum_equal fails: got 5 expected 6. Now reproduce search_lowercase.&rdquo;</div>
+<div class="obs">200 No items found</div>
+<div class="verify warn">VERIFY: self-check: failing scenarios without bug reports: [&#x27;sum_equal&#x27;, &#x27;search_lowercase&#x27;, &#x27;search_uppercase&#x27;]</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#7</span><span class="action-name">http_get</span><code class="args">{&quot;path&quot;: &quot;/items&quot;, &quot;params&quot;: {&quot;q&quot;: &quot;APPLE&quot;}}</code></div>
+<div class="thought">&ldquo;Confirmed search_lowercase fails. Now reproduce search_uppercase.&rdquo;</div>
+<div class="obs">200 No items found</div>
+<div class="verify warn">VERIFY: self-check: failing scenarios without bug reports: [&#x27;sum_equal&#x27;, &#x27;search_lowercase&#x27;, &#x27;search_uppercase&#x27;]</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#8</span><span class="action-name">report_bug</span><code class="args">{&quot;id&quot;: &quot;sum_equal&quot;, &quot;repro&quot;: &quot;1. Send GET request to /sum?a=3&amp;b=3\n2. Observe response body&quot;, &quot;expected&quot;: &quot;Response body should be &#x27;6&#x27; (sum of 3 and 3)&quot;, &quot;actual&quot;: &quot;Response body is &#x27;5&#x27;&quot;}</code></div>
+<div class="thought">&ldquo;All three failures confirmed. Now I need to file bug reports for each. Let me file the first bug for sum_equal.&rdquo;</div>
+<div class="obs">bug reported: sum_equal (1. Send GET request to /sum?a=3&amp;b=3
+2. Observe response body)</div>
+<div class="verify warn">VERIFY: self-check: failing scenarios without bug reports: [&#x27;search_lowercase&#x27;, &#x27;search_uppercase&#x27;]</div>
+</div>
+<div class="step action">
+<div class="step-head"><span class="iter">#9</span><span class="action-name">report_bug</span><code class="args">{&quot;id&quot;: &quot;search_lowercase&quot;, &quot;repro&quot;: &quot;1. Send GET request to /items?q=apple\n2. Observe response body&quot;, &quot;expected&quot;: &quot;Response body should contain &#x27;Apple Pie&#x27; (case-insensitive search should find item)&quot;, &quot;actual&quot;: &quot;Response body is &#x27;No items found&#x27;&quot;}</code></div>
+<div class="thought">&ldquo;Bug filed for sum_equal. Now file bug for search_lowercase.&rdquo;</div>
+<div class="obs">bug reported: search_lowercase (1. Send GET request to /items?q=apple
+2. Observe response body)</div>
+<div class="verify warn">VERIFY: self-check: failing scenarios without bug reports: [&#x27;search_uppercase&#x27;]</div>
+</div>
+<div class="step action verified">
+<div class="step-head"><span class="iter">#10</span><span class="action-name">report_bug</span><code class="args">{&quot;id&quot;: &quot;search_uppercase&quot;, &quot;repro&quot;: &quot;1. Send GET request to /items?q=APPLE\n2. Observe response body&quot;, &quot;expected&quot;: &quot;Response body should contain &#x27;Apple Pie&#x27; (case-insensitive search should find item)&quot;, &quot;actual&quot;: &quot;Response body is &#x27;No items found&#x27;&quot;}</code></div>
+<div class="thought">&ldquo;Bug filed for search_lowercase. Now file bug for search_uppercase.&rdquo;</div>
+<div class="obs">bug reported: search_uppercase (1. Send GET request to /items?q=APPLE
+2. Observe response body)</div>
+<div class="verify ok">VERIFY: self-check: all 3 failing scenarios have complete bug reports (repro, expected, actual)</div>
+</div></div>
+</body>
+</html>

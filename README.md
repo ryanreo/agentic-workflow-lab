@@ -150,6 +150,22 @@ run - see each thought, tool call, observation, and self-check in order:
 
 - [Visuals hub](visuals/index.html) - the agentic loop + all four agents
 
+## Standalone repos
+
+Each agent is also published as its own self-contained repository:
+
+- [pipeline-doctor](https://github.com/ryanreo/pipeline-doctor)
+- [document-extractor](https://github.com/ryanreo/document-extractor)
+- [deep-researcher](https://github.com/ryanreo/deep-researcher)
+- [qa-agent](https://github.com/ryanreo/qa-agent)
+
+## Eval results
+
+A snapshot of a full DeepSeek eval run (4/4 tasks passing) is committed under
+`eval/results/20260814-003522/` - summary, per-agent traces, and the HTML
+report. New runs are written to fresh timestamped folders and stay
+git-ignored.
+
 ## Honest notes
 
 - The offline demo brain is a deterministic stand-in so the project runs

@@ -1,0 +1,48 @@
+{
+  "llm": "deepseek",
+  "total": 4,
+  "passed": 4,
+  "results": [
+    {
+      "id": "pipeline-fix-1",
+      "agent": "pipeline_doctor",
+      "passed": true,
+      "outcome": "success",
+      "iterations": 5,
+      "duration_s": 6.89,
+      "summary": "self-check: test suite passes",
+      "trace_path": "eval\\results\\20260814-003522\\traces\\pipeline-fix-1.json"
+    },
+    {
+      "id": "invoice-extraction-1",
+      "agent": "document_extractor",
+      "passed": true,
+      "outcome": "success",
+      "iterations": 11,
+      "duration_s": 12.39,
+      "summary": "self-check: all documents pass arithmetic validation",
+      "trace_path": "eval\\results\\20260814-003522\\traces\\invoice-extraction-1.json"
+    },
+    {
+      "id": "research-company-report-1",
+      "agent": "deep_researcher",
+      "passed": true,
+      "outcome": "success",
+      "iterations": 10,
+      "duration_s": 15.89,
+      "summary": "self-check: every claim verified against sources; all required facts present",
+      "trace_path": "eval\\results\\20260814-003522\\traces\\research-company-report-1.json"
+    },
+    {
+      "id": "qa-sample-app-bugs",
+      "agent": "qa_agent",
+      "passed": true,
+      "outcome": "success",
+      "iterations": 10,
+      "duration_s": 15.01,
+      "summary": "self-check: all 3 failing scenarios have complete bug reports (repro, expected, actual)",
+      "trace_path": "eval\\results\\20260814-003522\\traces\\qa-sample-app-bugs.json"
+    }
+  ],
+  "results_dir": "C:\\Users\\osage\\OneDrive\\Documents\\Projects\\Workflowww\\eval\\results\\20260814-003522"
+}
