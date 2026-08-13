@@ -5,3 +5,4 @@ eval/results/
 traces/
 agents/deep_researcher/outputs/
 .venv/
+.portfolio-update/
