@@ -35,6 +35,10 @@ def main():
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{name}</title>
 <style>{css}</style>
+<style>
+:root {{ color-scheme: light; }}
+html {{ background: #ffffff; }}
+</style>
 </head>
 <body>{inner}</body>
 </html>"""
