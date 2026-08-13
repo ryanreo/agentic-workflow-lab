@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agentic Workflow Lab - Interactive Visuals</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      font-family: system-ui, "Segoe UI", sans-serif;
+      max-width: 880px; margin: 0 auto; padding: 40px 20px;
+      background: light-dark(#f7f8fa, #16181d); color: light-dark(#1c2430, #e8eaef);
+    }
+    h1 { font-size: 26px; margin: 0 0 6px; }
+    p.lede { color: light-dark(#5b6472, #9aa3b2); margin: 0 0 28px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+    a.card {
+      display: block; text-decoration: none; border: 1px solid light-dark(#dfe3ea, #2a2f3a);
+      border-radius: 10px; padding: 16px 18px; background: light-dark(#fff, #1e222b);
+      color: inherit; transition: transform .08s ease, border-color .08s ease;
+    }
+    a.card:hover { transform: translateY(-2px); border-color: light-dark(#4a6cf7, #7c9aff); }
+    .tag { display: inline-block; font-size: 11px; border-radius: 999px; padding: 2px 9px;
+           background: light-dark(#e8f3ec, #1e3a2a); color: light-dark(#1f7a44, #63d391); margin-bottom: 8px; }
+    h2 { font-size: 16px; margin: 0 0 6px; }
+    p { font-size: 13px; color: light-dark(#5b6472, #9aa3b2); margin: 0; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <h1>Agentic Workflow Lab - interactive traces</h1>
+  <p class="lede">Step through real agent runs: every thought, tool call, observation, and self-check. Each page is a trace from the DeepSeek eval run - 4/4 tasks passed.</p>
+  <div class="grid">
+    <a class="card" href="agentic-core-loop.html">
+      <span class="tag">the engine</span>
+      <h2>The agentic loop</h2>
+      <p>Plan, act, observe, verify, repeat - the shared loop behind every agent here.</p>
+    </a>
+    <a class="card" href="pipeline-doctor.html">
+      <span class="tag">pipeline_doctor</span>
+      <h2>Fixing a failing test suite</h2>
+      <p>The agent diagnoses, fixes, and re-runs until the suite is green.</p>
+    </a>
+    <a class="card" href="document-extractor.html">
+      <span class="tag">document_extractor</span>
+      <h2>Auditing its own extraction</h2>
+      <p>Catches its own bad math on invoices and corrects total and VAT figures.</p>
+    </a>
+    <a class="card" href="deep-researcher.html">
+      <span class="tag">deep_researcher</span>
+      <h2>Fact-checking a report</h2>
+      <p>Drafts, verifies every claim against sources, and rewrites what it can't back up.</p>
+    </a>
+    <a class="card" href="qa-agent.html">
+      <span class="tag">qa_agent</span>
+      <h2>Finding bugs in a live app</h2>
+      <p>Runs scenarios, finds failures, and files bug reports with repro steps.</p>
+    </a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.env
+eval/results/
+traces/
+agents/deep_researcher/outputs/
+.venv/

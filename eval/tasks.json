@@ -1,0 +1,32 @@
+{
+  "tasks": [
+    {
+      "id": "pipeline-fix-1",
+      "agent": "pipeline_doctor",
+      "task": {"repo": "agents/pipeline_doctor/sample_repo"}
+    },
+    {
+      "id": "invoice-extraction-1",
+      "agent": "document_extractor",
+      "task": {"docs": "agents/document_extractor/sample_docs"}
+    },
+    {
+      "id": "research-company-report-1",
+      "agent": "deep_researcher",
+      "task": {
+        "question": "Write a report about the company: founding year, what it does, and 2025 revenue.",
+        "corpus": "agents/deep_researcher/corpus",
+        "must_contain": ["2019", "logistics", "12M"],
+        "focus_terms": ["founded", "2019", "logistics", "revenue"]
+      }
+    },
+    {
+      "id": "qa-sample-app-bugs",
+      "agent": "qa_agent",
+      "task": {
+        "scenarios": "agents/qa_agent/scenarios.json",
+        "app": "agents/qa_agent/sample_app"
+      }
+    }
+  ]
+}

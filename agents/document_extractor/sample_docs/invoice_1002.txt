@@ -1,0 +1,9 @@
+Invoice 1002
+Date: 2026-07-02
+Customer: Globex Ltd
+Items:
+- Gasket - 4 x $12.50 = $50.00
+- Bolt - 10 x $1.50 = $15.00
+- Labor - 1 x $45.00 = $45.00
+Total: $110.00
+VAT: 16% -> $17.00

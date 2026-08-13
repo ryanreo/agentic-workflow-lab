@@ -1,0 +1,3 @@
+# Zero third-party dependencies required - this project runs on the Python
+# standard library only. Optional: use a real LLM via OPENAI_API_KEY
+# (works with any OpenAI-compatible chat/completions endpoint).

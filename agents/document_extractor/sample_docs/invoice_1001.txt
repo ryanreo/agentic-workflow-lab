@@ -1,0 +1,9 @@
+Invoice 1001
+Date: 2026-07-01
+Customer: Acme Corp
+Items:
+- Widget A - 3 x $50.00 = $150.00
+- Widget B - 2 x $25.00 = $50.00
+- Shipping - 1 x $20.00 = $20.00
+Total: $219.00
+VAT: 16% -> $35.04
